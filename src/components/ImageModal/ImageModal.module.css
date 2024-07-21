@@ -1,0 +1,20 @@
+.overlayModal {
+    background-color: rgba(0, 0, 0, 0.79);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.title {
+    font-size: 35px;
+    text-align: center;
+    padding: 20px;
+}
+
+.likes {
+    font-size: 22px;
+    padding: 20px;
+    display: block;
+}

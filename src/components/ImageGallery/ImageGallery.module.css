@@ -1,0 +1,18 @@
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(28, 192, 214);
+}
+
+.element {
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+}
+
+.element:hover {
+    box-shadow: 0px 0px 5px black;
+}
