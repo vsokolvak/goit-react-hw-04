@@ -1,9 +1,11 @@
 import style from "./LoadMoreBtn.module.css";
 
-function LoadMoreBtn({ addImg }) {
+function LoadMoreBtn({ updatePage }) {
   return (
     <div className={style.wrapper}>
-      <button onClick={addImg} className={style.btn}>Load More</button>
+      <button onClick={updatePage} className={style.btn}>
+        Load More
+      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import toast, { Toaster } from "react-hot-toast";
 import style from "./SearchBar.module.css";
 
-function SearchBar({ getImgGalery, load }) {
+function SearchBar({ setSerchImg, load }) {
   const serchImg = (e) => {
     e.preventDefault();
     const serchText = e.target.elements.serchText.value;
@@ -12,7 +12,7 @@ function SearchBar({ getImgGalery, load }) {
       });
       return;
     }
-    getImgGalery(serchText);
+    setSerchImg(serchText);
     e.target.reset();
   };
 

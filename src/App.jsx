@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageGallery from "./components/ImageGallery/ImageGallery"
 import SearchBar from "./components/SearchBar/SearchBar"
 import { getImg } from "./axios/getImg";
@@ -11,25 +11,26 @@ import ImageModal from "./components/ImageModal/ImageModal";
 function App() {
 
   const [load, setLoad] = useState(false);
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
   const [galeryData, setGaleryData] = useState([])
   const [serchEror, setSerchEror] = useState(false)
   const [serchText, setSerchText] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const [modalData, setmodalData] = useState({});
 
-  const getImgGalery = async (serchText) => {
+  const getImgGalery = async () => {
+
+    if (serchText.length < 3) return
+
     try {
-      setGaleryData([])
-      setSerchText(serchText)
       setSerchEror(false)
       setLoad(true)
-      const imgData = await getImg(serchText)
+      const imgData = await getImg(serchText, page)
       if (imgData.length === 0) {
         setSerchEror(true);
         return
       }
-      setGaleryData(imgData)
+      setGaleryData((prev) => [...prev, ...imgData]);
     }
     catch {
       setSerchEror(true)
@@ -38,22 +39,13 @@ function App() {
       setLoad(false)
     }
   }
-  const updateImgGalery = async () => {
-    try {
-      setSerchEror(false);
-      setLoad(true);
-      const imgData = await getImg(serchText, page + 1);
-      if (imgData.length === 0) {
-        // setSerchEror(true);
-        return;
-      }
-      setPage(page + 1);
-      setGaleryData(prev => [...prev, ...imgData]);
-    } catch {
-      // setSerchEror(true);
-    } finally {
-      setLoad(false);
-    }
+  const loadMore = () => {
+    setPage(page + 1);
+  }
+  const setSerchImg = (serchText) => {
+    setGaleryData([]);
+    setPage(1);
+    setSerchText(serchText);
   }
   const openModalWindow = (alt_description, likes, urls) => {
     setOpenModal(true)
@@ -63,9 +55,13 @@ function App() {
     setOpenModal(false)
   }
 
+  useEffect(() => {
+    getImgGalery();
+  }, [serchText, page]);
+
   return (
     <>
-      <SearchBar load={load} getImgGalery={getImgGalery} />
+      <SearchBar load={load} setSerchImg={setSerchImg} />
       {galeryData.length > 0 && (
         <ImageGallery
           galeryData={galeryData}
@@ -74,7 +70,7 @@ function App() {
       )}
       {load && <Loader />}
       {serchEror && <ErrorMessage />}
-      {galeryData.length > 0 && <LoadMoreBtn addImg={updateImgGalery} />}
+      {galeryData.length > 0 && <LoadMoreBtn updatePage={loadMore} />}
       {openModal && (
         <ImageModal
           openModal={openModal}
